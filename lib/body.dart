@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+// import 'package:install_plugin/install_plugin.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Body extends StatefulWidget {
   const Body({super.key});
@@ -24,8 +26,12 @@ class _BodyState extends State<Body> {
 
   Future<String> _getLocalFilePath() async {
     final directory = await getExternalStorageDirectory();
-    return "${directory!.path}/app_version2.apk";
+    return "${directory!.path}/bitblue-latest.apk";
   }
+
+  Future<void> _requestPermissions() async {
+  await Permission.storage.request();
+}
 
   Future<void> _checkForUpdate() async {
     try {
@@ -68,15 +74,32 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Future<void> _downloadAndInstallApk(String apkUrl) async {
-    final dio = Dio();
-    final apkPath = await _getLocalFilePath();
-
+  void _downloadAndInstallApk(String apkUrl) async {
+    await _requestPermissions();
     try {
-      await dio.download(apkUrl, apkPath);
-      OpenFile.open(apkPath); 
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator());
+        },
+      );
+
+      // Get the path to save the downloaded APK
+      String filePath = await _getLocalFilePath();
+
+      // Download the APK using Dio
+      Dio dio = Dio();
+      await dio.download(apkUrl, filePath);
+
+      // Close the loading indicator
+      Navigator.pop(context);
+
+      // Open the downloaded APK file
+      OpenFile.open(filePath);
     } catch (e) {
-      print("Error downloading APK: $e");
+      Navigator.pop(context); // Close the loading indicator if there's an error
+      print("Error downloading or opening APK: $e");
     }
   }
 

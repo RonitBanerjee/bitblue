@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Body extends StatefulWidget {
   const Body({super.key});
@@ -22,11 +23,12 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     super.initState();
+    _checkForUpdate();
   }
 
   Future<String> _getLocalFilePath() async {
     final directory = await getExternalStorageDirectory();
-    return "${directory!.path}/bitblue-latest.apk";
+    return "${directory!.path}/app-release.apk";
   }
 
   Future<void> _requestPermissions() async {
@@ -96,7 +98,7 @@ class _BodyState extends State<Body> {
       Navigator.pop(context);
 
       // Open the downloaded APK file
-      OpenFile.open(filePath);
+      launchUrl(Uri.parse(apkUrl));
     } catch (e) {
       Navigator.pop(context); // Close the loading indicator if there's an error
       print("Error downloading or opening APK: $e");
@@ -121,8 +123,8 @@ class _BodyState extends State<Body> {
               color: Colors.black,
             ),
           ),
-          const Text(
-            'v2.0.0',
+           Text(
+            'v$currentVersion',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -132,8 +134,9 @@ class _BodyState extends State<Body> {
           MouseRegion(
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
-              onTap: () {
-                _checkForUpdate();
+              onTap: () async {
+                print('This is here...');
+                await _checkForUpdate();
               },
               child: Container(
                 margin: const EdgeInsets.only(top: 8),

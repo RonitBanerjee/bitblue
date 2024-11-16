@@ -23,6 +23,7 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     super.initState();
+    _checkForUpdate();
   }
 
   Future<String> _getLocalFilePath() async {
@@ -119,8 +120,8 @@ class _BodyState extends State<Body> {
               color: Colors.black,
             ),
           ),
-          const Text(
-            'v1.0.0',
+           Text(
+            'v$currentVersion',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,

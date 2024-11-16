@@ -4,13 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
-   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-
   const MyApp({super.key});
 
   @override
@@ -35,7 +32,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-        body: Body()
+        body: Body(),
       ),
     );
   }

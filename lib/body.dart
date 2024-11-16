@@ -74,7 +74,7 @@ class _BodyState extends State<Body> {
 
     try {
       await dio.download(apkUrl, apkPath);
-      OpenFile.open(apkPath); 
+      OpenFile.open(apkPath);
     } catch (e) {
       print("Error downloading APK: $e");
     }
@@ -87,8 +87,11 @@ class _BodyState extends State<Body> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Image.network(
+            'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXhpcHgxdDRzZTk4MDU3cGZteWlkYnlwaG95dWNkNjRiZnM3azkzMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/clnORRzuaBV7rNisCP/giphy.gif',
+          ),
           const Text(
-            'This is the base version of BitBlue',
+            'This is the latest version of BitBlue',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -96,7 +99,7 @@ class _BodyState extends State<Body> {
             ),
           ),
           const Text(
-            'v1.0.0',
+            'v2.0.0',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,

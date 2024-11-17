@@ -121,10 +121,17 @@ class _BodyState extends State<Body> {
     showDialog(
       context: context,
       builder: (context) {
-        return const AlertDialog(
-          title: Text("Already At Latest Version"),
+        return  AlertDialog(
+          title: const Text("Already At Latest Version"),
           content:
-              Text("You aleady have the latest version of this app installed!"),
+              const Text("You aleady have the latest version of this app installed!"),
+               actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Ok"),
+            ),
+            
+          ],
         );
       },
     );

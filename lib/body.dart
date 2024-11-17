@@ -124,7 +124,7 @@ class _BodyState extends State<Body> {
         return  AlertDialog(
           title: const Text("Already At Latest Version"),
           content:
-              const Text("You aleady have the latest version of this app installed!"),
+              const Text("You already have the latest version of this app installed!"),
                actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),

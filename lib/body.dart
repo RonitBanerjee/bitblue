@@ -1,9 +1,6 @@
-import 'dart:convert';
-import 'package:dio/dio.dart';
+import 'package:bitblue/api/functions.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Body extends StatefulWidget {
   const Body({super.key});
@@ -13,35 +10,87 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  final String currentVersion = "1.0.0";
-  final String updateUrl =
-      "https://demo-uxapollo.s3.eu-north-1.amazonaws.com/bitblue.json";
-
   @override
   void initState() {
     super.initState();
   }
 
-  Future<String> _getLocalFilePath() async {
-    final directory = await getExternalStorageDirectory();
-    return "${directory!.path}/app_version2.apk";
-  }
-
-  Future<void> _checkForUpdate() async {
+  void _downloadAndInstallApk(String apkUrl) async {
+    await Functions.requestPermissions();
     try {
-      final response = await http.get(Uri.parse(updateUrl));
-      if (response.statusCode == 200) {
-        final versionData = json.decode(response.body);
-        if (versionData['latest_version'] != currentVersion) {
-          print(versionData['apk_url']);
-          _showUpdateDialog(versionData['apk_url']);
-        }
-      }
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(child: CircularProgressIndicator());
+        },
+      );
+
+      // Close the loading indicator
+      Navigator.pop(context);
+
+      // Open the downloaded APK file
+      launchUrl(Uri.parse(apkUrl));
     } catch (e) {
-      print("Error checking for updates: $e");
+      Navigator.pop(context);
+      print("Error downloading or opening APK: $e");
     }
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.network(
+            'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXhpcHgxdDRzZTk4MDU3cGZteWlkYnlwaG95dWNkNjRiZnM3azkzMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/clnORRzuaBV7rNisCP/giphy.gif',
+          ),
+          const Text(
+            'This is the latest version of BitBlue',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          Text(
+            'v${Functions.currentVersion}',
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueGrey,
+            ),
+          ),
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () async {
+                var versionData = await Functions.checkForUpdate();
+                if (versionData['latest_version'] != Functions.currentVersion) {
+                  _showUpdateDialog(versionData['apk_url']);
+                } else {
+                  _showNoUpdatesDialog();
+                }
+              },
+              child: Container(
+                margin: const EdgeInsets.only(top: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                    color: Colors.amber,
+                    borderRadius: BorderRadius.circular(8)),
+                child: const Text('Check For Updates'),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  //This is the code for the dialog
   void _showUpdateDialog(String apkUrl) {
     showDialog(
       context: context,
@@ -68,60 +117,16 @@ class _BodyState extends State<Body> {
     );
   }
 
-  Future<void> _downloadAndInstallApk(String apkUrl) async {
-    final dio = Dio();
-    final apkPath = await _getLocalFilePath();
-
-    try {
-      await dio.download(apkUrl, apkPath);
-      OpenFile.open(apkPath); 
-    } catch (e) {
-      print("Error downloading APK: $e");
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text(
-            'This is the base version of BitBlue',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          const Text(
-            'v1.0.0',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.blueGrey,
-            ),
-          ),
-          MouseRegion(
-            cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () {
-                _checkForUpdate();
-              },
-              child: Container(
-                margin: const EdgeInsets.only(top: 8),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.circular(8)),
-                child: const Text('Check For Updates'),
-              ),
-            ),
-          )
-        ],
-      ),
+  void _showNoUpdatesDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const AlertDialog(
+          title: Text("Already At Latest Version"),
+          content:
+              Text("You aleady have the latest version of this app installed!"),
+        );
+      },
     );
   }
 }

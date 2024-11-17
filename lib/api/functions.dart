@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 
 class Functions {
-  static String currentVersion = "2.0.0";
+  static String currentVersion = "1.0.0";
   static String updateUrl =
       "https://demo-uxapollo.s3.eu-north-1.amazonaws.com/bitblue.json";
 

@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.blue,
           centerTitle: true,
           title: const Text(
             'BitBlue',

@@ -44,9 +44,6 @@ class _BodyState extends State<Body> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.network(
-            'https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXhpcHgxdDRzZTk4MDU3cGZteWlkYnlwaG95dWNkNjRiZnM3azkzMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/clnORRzuaBV7rNisCP/giphy.gif',
-          ),
           const Text(
             'This is the latest version of BitBlue',
             style: TextStyle(

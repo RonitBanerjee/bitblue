@@ -45,7 +45,7 @@ class _BodyState extends State<Body> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(
-            'This is the latest version of BitBlue',
+            'This is the base version of BitBlue',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,

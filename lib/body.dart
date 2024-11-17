@@ -13,10 +13,7 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     super.initState();
-    Functions.checkForUpdate();
   }
-
-
 
   void _downloadAndInstallApk(String apkUrl) async {
     await Functions.requestPermissions();
@@ -58,9 +55,9 @@ class _BodyState extends State<Body> {
               color: Colors.black,
             ),
           ),
-          const Text(
-            'v1.0.0',
-            style: TextStyle(
+          Text(
+            'v${Functions.currentVersion}',
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.blueGrey,
@@ -70,10 +67,11 @@ class _BodyState extends State<Body> {
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
               onTap: () async {
-                print('This is here...');
                 var versionData = await Functions.checkForUpdate();
-                if (versionData != null) {
+                if (versionData['latest_version'] != Functions.currentVersion) {
                   _showUpdateDialog(versionData['apk_url']);
+                } else {
+                  _showNoUpdatesDialog();
                 }
               },
               child: Container(
@@ -91,7 +89,6 @@ class _BodyState extends State<Body> {
       ),
     );
   }
-
 
   //This is the code for the dialog
   void _showUpdateDialog(String apkUrl) {
@@ -115,6 +112,19 @@ class _BodyState extends State<Body> {
               child: const Text("Update"),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  void _showNoUpdatesDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const AlertDialog(
+          title: Text("Already At Latest Version"),
+          content:
+              Text("You aleady have the latest version of this app installed!"),
         );
       },
     );

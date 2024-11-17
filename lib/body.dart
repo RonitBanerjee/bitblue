@@ -30,7 +30,7 @@ class _BodyState extends State<Body> {
       Navigator.pop(context);
 
       // Open the downloaded APK file
-      launchUrl(Uri.parse(apkUrl));
+      launchUrl(Uri.parse(apkUrl), mode: LaunchMode.externalApplication);
     } catch (e) {
       Navigator.pop(context);
       print("Error downloading or opening APK: $e");

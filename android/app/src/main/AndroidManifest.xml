@@ -4,7 +4,7 @@
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" tools:node="remove"/> 
     <application
-        android:label="Bitblue"
+        android:label="bitblue"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
@@ -26,7 +26,9 @@
               />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+                
                 <category android:name="android.intent.category.LAUNCHER"/>
+                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

@@ -19,8 +19,4 @@ class Functions {
       print("Error checking for updates: $e");
     }
   }
-
-    static Future<void> requestPermissions() async {
-    await Permission.storage.request();
-  }
 }

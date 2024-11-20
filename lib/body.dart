@@ -16,7 +16,6 @@ class _BodyState extends State<Body> {
   }
 
   void _downloadAndInstallApk(String apkUrl) async {
-    await Functions.requestPermissions();
     try {
       showDialog(
         context: context,
